@@ -1,20 +1,18 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 
-Route::get('auth/google', [LoginController::class, 'redirectToGoogle']);
-Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->middleware('guest');
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->middleware('guest');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard')->middleware('auth'); // Protect with authentication middleware
+})->name('dashboard')->middleware('auth'); // Protect with authentication
 
-
-// Define a login route with a name
 Route::get('/login', function () {
-    return view('login'); // Create a login.blade.php file in resources/views/
-})->name('login');
+    return view('login');
+})->name('login')->middleware('guest'); // Only for guests
 
 Route::get('/logout', function () {
     Auth::logout();
